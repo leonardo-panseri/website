@@ -1,0 +1,3 @@
+#!/bin/sh
+# Fails the commit if staged files aren't formatted/linted. Fix with: pnpm check:fix
+exec pnpm exec biome check --staged --no-errors-on-unmatched --files-ignore-unknown=true
