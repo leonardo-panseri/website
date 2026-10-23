@@ -1,59 +1,299 @@
 ---
+import { Font } from "astro:assets";
 import BaseHead from "../components/BaseHead.astro";
-import Footer from "../components/Footer.astro";
-import Header from "../components/Header.astro";
-import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import CantoAlto from "../components/CantoAlto.astro";
+
+const links = [
+  { label: "Southwind", href: "https://www.southwind.ai/", featured: true },
+  { label: "Email", href: "mailto:leonardo.panseri@southwind.ai" },
+  { label: "GitHub", href: "https://github.com/leonardo-panseri" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/leonardopanseri" },
+];
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to
-				build a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your{' '}
-				<code>astro.config.mjs</code> file. You can customize your setup with{' '}
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like
-				Tailwind, React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>
-					Edit this page in <code>src/pages/index.astro</code>
-				</li>
-				<li>
-					Edit the site header items in <code>src/components/Header.astro</code>
-				</li>
-				<li>
-					Add your name to the footer in <code>src/components/Footer.astro</code>
-				</li>
-				<li>
-					Check out the included blog posts in <code>src/content/blog/</code>
-				</li>
-				<li>
-					Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code>
-				</li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to{' '}
-				<a href="https://docs.astro.build/">read the docs</a> or{' '}
-				<a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out{' '}
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a> by{' '}
-				<a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+    <head>
+        <BaseHead
+            title="Leonardo Panseri"
+            description="Leonardo Panseri — links and contacts."
+        />
+        <Font cssVariable="--font-fraunces" preload />
+        <Font cssVariable="--font-instrument-sans" preload />
+        <script is:inline>
+            // Apply the saved theme before first paint to avoid a flash.
+            const saved = localStorage.getItem("theme");
+            if (saved === "light" || saved === "dark") {
+                document.documentElement.dataset.theme = saved;
+            }
+        </script>
+    </head>
+    <body>
+        <button type="button" class="theme-toggle" data-theme-toggle>
+            <svg
+                class="moon"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            >
+                <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"></path>
+            </svg>
+            <svg
+                class="sun"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.75"
+                stroke-linecap="round"
+            >
+                <circle cx="12" cy="12" r="4"></circle>
+                <path
+                    d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+                ></path>
+            </svg>
+        </button>
+        <main>
+            <header>
+                <h1>Leonardo Panseri</h1>
+                <nav aria-label="Links">
+                    <ul>
+                        {
+                            links.map(({ label, href, featured }) => (
+                                <li class:list={{ featured }}>
+                                    <a href={href} rel="me">
+                                        {label}
+                                    </a>
+                                </li>
+                            ))
+                        }
+                    </ul>
+                </nav>
+            </header>
+            <div class="stage">
+                <CantoAlto controls={false} />
+            </div>
+        </main>
+    </body>
 </html>
+
+<style>
+    /* Registered so the theme colours can transition (gradients can't). */
+    @property --sky-top {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #8fd4ff;
+    }
+    @property --sky-bottom {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #e6f6ff;
+    }
+    @property --ink {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #12324a;
+    }
+    @property --ink-soft {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #3f6680;
+    }
+    @property --chip {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Same sky as the diorama, so the scene blends into the page. */
+    :global(:root) {
+        --sky-top: #8fd4ff;
+        --sky-bottom: #e6f6ff;
+        --ink: #12324a;
+        --ink-soft: #3f6680;
+        --chip: rgba(255, 255, 255, 0.6);
+        --focus: #0b5fa5;
+        color-scheme: light;
+        transition:
+            --sky-top 0.6s,
+            --sky-bottom 0.6s,
+            --ink 0.6s,
+            --ink-soft 0.6s,
+            --chip 0.6s;
+    }
+    @media (prefers-color-scheme: dark) {
+        :global(:root:not([data-theme="light"])) {
+            --sky-top: #0a1a2e;
+            --sky-bottom: #2a4a6e;
+            --ink: #e8f4ff;
+            --ink-soft: #a6c6de;
+            --chip: rgba(8, 22, 38, 0.55);
+            --focus: #8fd4ff;
+            color-scheme: dark;
+        }
+    }
+    :global(:root[data-theme="dark"]) {
+        --sky-top: #0a1a2e;
+        --sky-bottom: #2a4a6e;
+        --ink: #e8f4ff;
+        --ink-soft: #a6c6de;
+        --chip: rgba(8, 22, 38, 0.55);
+        --focus: #8fd4ff;
+        color-scheme: dark;
+    }
+
+    body {
+        height: 100dvh;
+        overflow: hidden;
+        background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
+        color: var(--ink);
+        font-family: var(--font-instrument-sans);
+    }
+    main {
+        box-sizing: border-box;
+        width: 100%;
+        max-width: none;
+        height: 100dvh;
+        margin: 0;
+        padding: 3rem 0 0;
+        display: flex;
+        flex-direction: column;
+    }
+    header {
+        padding: 0 1.5rem;
+        text-align: center;
+    }
+    h1 {
+        margin: 0 0 0.5rem;
+        color: inherit;
+        font-family: var(--font-fraunces);
+        font-size: clamp(2.25rem, 7vw, 3.75rem);
+        font-weight: 600;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+    }
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.25rem 1.75rem;
+        font-size: 1.05rem;
+        letter-spacing: 0.01em;
+    }
+    .featured {
+        flex-basis: 100%;
+        margin-bottom: 0.35rem;
+        font-family: var(--font-fraunces);
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+    a {
+        color: var(--ink-soft);
+        text-decoration: none;
+        text-underline-offset: 0.25em;
+        text-decoration-thickness: 1px;
+        transition: color 0.2s;
+    }
+    a:hover,
+    a:focus-visible {
+        color: var(--ink);
+        text-decoration: underline;
+    }
+    a:focus-visible,
+    .theme-toggle:focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 3px;
+        border-radius: 4px;
+    }
+    .stage {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+    }
+    .stage :global(.canto-alto) {
+        aspect-ratio: auto;
+        height: 100%;
+        border-radius: 0;
+        background: none;
+    }
+
+    .theme-toggle {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1;
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        padding: 0;
+        border: 0;
+        border-radius: 999px;
+        color: var(--ink);
+        background: var(--chip);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        cursor: pointer;
+    }
+    .theme-toggle svg {
+        width: 20px;
+        height: 20px;
+    }
+    .sun {
+        display: none;
+    }
+    @media (prefers-color-scheme: dark) {
+        :global(:root:not([data-theme="light"])) .sun {
+            display: block;
+        }
+        :global(:root:not([data-theme="light"])) .moon {
+            display: none;
+        }
+    }
+    :global(:root[data-theme="dark"]) .sun {
+        display: block;
+    }
+    :global(:root[data-theme="dark"]) .moon {
+        display: none;
+    }
+
+    @media (max-width: 720px) {
+        main {
+            padding-top: 4rem;
+        }
+    }
+</style>
+
+<script>
+    const root = document.documentElement;
+    const toggle = document.querySelector<HTMLButtonElement>(
+        "[data-theme-toggle]",
+    );
+    const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+
+    const isDark = () =>
+        root.dataset.theme ? root.dataset.theme === "dark" : darkMQ.matches;
+
+    function label() {
+        toggle?.setAttribute(
+            "aria-label",
+            isDark() ? "Switch to light mode" : "Switch to dark mode",
+        );
+    }
+
+    toggle?.addEventListener("click", () => {
+        const next = isDark() ? "light" : "dark";
+        root.dataset.theme = next;
+        localStorage.setItem("theme", next);
+        label();
+    });
+    darkMQ.addEventListener("change", label);
+    label();
+</script>

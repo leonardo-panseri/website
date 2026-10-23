@@ -31,5 +31,21 @@ export default defineConfig({
         ],
       },
     },
+    {
+      provider: fontProviders.google(),
+      name: "Fraunces",
+      cssVariable: "--font-fraunces",
+      weights: ["400 700"],
+      styles: ["normal"],
+      fallbacks: ["serif"],
+    },
+    {
+      provider: fontProviders.google(),
+      name: "Instrument Sans",
+      cssVariable: "--font-instrument-sans",
+      weights: ["400 600"],
+      styles: ["normal"],
+      fallbacks: ["sans-serif"],
+    },
   ],
 });

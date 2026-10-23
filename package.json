@@ -20,12 +20,14 @@
     "@astrojs/sitemap": "^3.7.4",
     "astro": "^7.3.7",
     "sharp": "^0.35.0",
+    "three": "0.186.1",
     "typescript": "^7.0.2"
   },
   "allowScripts": {
     "esbuild": true
   },
   "devDependencies": {
-    "@biomejs/biome": "2.5.15"
+    "@biomejs/biome": "2.5.15",
+    "@types/three": "0.186.0"
   }
 }

@@ -1,0 +1,198 @@
+---
+// Pixel-art 3D diorama of the Canto Alto summit (1146 m, above Bergamo),
+// with the Italian flag flying where the summit cross stands.
+interface Props {
+  class?: string;
+  /** Starting pixel size; 1 renders at full resolution. */
+  pixels?: 1 | 2 | 3 | 4;
+  /** Show the drag hint and the replay / pixel-size controls. */
+  controls?: boolean;
+}
+
+const { class: className, pixels = 3, controls = true } = Astro.props;
+---
+
+<div
+    class:list={["canto-alto", className]}
+    data-canto-alto
+    data-pixels={pixels}
+>
+    <canvas
+        role="img"
+        aria-label="The wooded summit of Canto Alto above Bergamo, with a lattice mast flying the Italian flag beside a round viewing platform, hikers and an Alpini hut in the woods, slowly rotating"
+    ></canvas>
+    {
+        controls && (
+    <>
+    <p class="hint" data-hint>
+        Drag to turn the mountain
+    </p>
+    <div class="controls">
+        <div class="group">
+            <button type="button" data-replay>
+                Replay intro
+            </button>
+        </div>
+        <div class="group" role="group" aria-label="Pixel size">
+            <span>Pixels</span>
+            <button type="button" data-px="1" aria-pressed={pixels === 1}>
+                Off
+            </button>
+            <button type="button" data-px="2" aria-pressed={pixels === 2}>
+                2×
+            </button>
+            <button type="button" data-px="3" aria-pressed={pixels === 3}>
+                3×
+            </button>
+            <button type="button" data-px="4" aria-pressed={pixels === 4}>
+                4×
+            </button>
+        </div>
+    </div>
+    </>
+        )
+    }
+</div>
+
+<style>
+    .canto-alto {
+        --sky-top: #8fd4ff;
+        --sky-bottom: #e6f6ff;
+        --ink: #12324a;
+        --ink-soft: #3f6680;
+        --chip: rgba(255, 255, 255, 0.6);
+        --chip-on: #12324a;
+        --chip-on-ink: #e6f6ff;
+        --focus: #0b5fa5;
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        border-radius: 12px;
+        background-color: var(--sky-top);
+        background-image: linear-gradient(
+            180deg,
+            var(--sky-top) 0%,
+            var(--sky-bottom) 100%
+        );
+        color: var(--ink);
+    }
+    @media (prefers-color-scheme: dark) {
+        :global(:root:not([data-theme="light"])) .canto-alto {
+            --sky-top: #0a1a2e;
+            --sky-bottom: #2a4a6e;
+            --ink: #e8f4ff;
+            --ink-soft: #a6c6de;
+            --chip: rgba(8, 22, 38, 0.55);
+            --chip-on: #e8f4ff;
+            --chip-on-ink: #0a1a2e;
+            --focus: #8fd4ff;
+        }
+    }
+    :global(:root[data-theme="dark"]) .canto-alto {
+        --sky-top: #0a1a2e;
+        --sky-bottom: #2a4a6e;
+        --ink: #e8f4ff;
+        --ink-soft: #a6c6de;
+        --chip: rgba(8, 22, 38, 0.55);
+        --chip-on: #e8f4ff;
+        --chip-on-ink: #0a1a2e;
+        --focus: #8fd4ff;
+    }
+    canvas {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        touch-action: pan-y;
+        cursor: grab;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+    }
+    canvas:global(.smooth) {
+        image-rendering: auto;
+    }
+    canvas:global(.dragging) {
+        cursor: grabbing;
+    }
+    .controls {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 0 12px 12px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        pointer-events: none;
+    }
+    .group {
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        padding: 3px;
+        border-radius: 999px;
+        background: var(--chip);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+    }
+    .group span {
+        padding: 0 8px 0 10px;
+        font-size: 0.8rem;
+        color: var(--ink-soft);
+    }
+    button {
+        font: inherit;
+        font-size: 0.85rem;
+        line-height: 1;
+        color: var(--ink);
+        background: transparent;
+        border: 0;
+        border-radius: 999px;
+        padding: 6px 12px;
+        cursor: pointer;
+        min-height: 32px;
+    }
+    button[aria-pressed="true"] {
+        background: var(--chip-on);
+        color: var(--chip-on-ink);
+    }
+    button:focus-visible {
+        outline: 2px solid var(--focus);
+        outline-offset: 2px;
+    }
+    .hint {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 58px;
+        margin: 0;
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--ink-soft);
+        pointer-events: none;
+        transition: opacity 0.6s;
+    }
+    .canto-alto :global(.fallback) {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        text-align: center;
+    }
+</style>
+
+<script>
+    import { mountCantoAlto } from "../scripts/canto-alto";
+
+    for (const el of document.querySelectorAll<HTMLElement>(
+        "[data-canto-alto]",
+    )) {
+        mountCantoAlto(el);
+    }
+</script>
